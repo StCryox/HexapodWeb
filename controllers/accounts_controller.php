@@ -5,7 +5,7 @@
 			if (!isset($_GET['signed']))
 				return call('accounts', 'signin');
 			
-			$account = new Account("Ismail", "NGUYEN");
+			$account = new Account("", "");
 
 			require_once('views/pages/accounts/index.php');
 		}

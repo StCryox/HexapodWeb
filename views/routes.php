@@ -45,7 +45,7 @@
 								'datatable',
 								'create', 
 								'edit',
-								'toto'
+								'delete'
 								],
 
 					   'accounts' 

@@ -4,9 +4,11 @@
             <table class="table table-striped table-condensed">
                   <thead>
                   <tr>
-                      <th>Username</th>
-                      <th>Date registered</th>
-                      <th>Status</th>                                          
+                      <th>ID</th>
+                      <th>Nom</th>
+                      <th>Commande</th>
+                      <th>modifier</th>
+                      <th>supprimer</th>                                           
                   </tr>
               </thead>   
               <tbody>
@@ -15,9 +17,11 @@
                     {
                 ?>
                  <tr>
+                    <td><?php echo $parcours->id; ?></td>
                     <td><?php echo $parcours->name; ?></td>
                     <td><?php echo $parcours->command; ?></td>
-                    <td><span class="label label-success">Active</span>
+                    <th><button type='button'>modifier</button></th> 
+                    <th><a href='index.php?controller=parcours&action=datatable&delete&name=<?php echo $parcours->name; ?>' type='button'>supprimer</a></th> 
                     </td>                                       
                 </tr>
                <?php

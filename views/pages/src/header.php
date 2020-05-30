@@ -1,5 +1,5 @@
   <!-- Title -->
-  <div class="container is_centered">
+  <div class="container">
    <center><h1>Gestion de l'Hexapode</h1></center>
   </div>
   
