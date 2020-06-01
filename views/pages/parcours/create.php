@@ -47,12 +47,9 @@ if (isset($error_message) && !empty($error_message)) {
 
 
 <script >
-
-document.getElementById("form").addEventListener("click", function(event){
-  //let valeur = document.forms["formulaire"].elements[0].value;
-  let valeur = document.getElementById('test').value;
-  console.log(valeur);
-});
-
-
+  document.getElementById("form").addEventListener("click", function(event){
+    let valeur = document.getElementById('test').value;
+    console.log(valeur);
+    var test = valeur;
+  });
 </script>
