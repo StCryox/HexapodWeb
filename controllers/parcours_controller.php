@@ -6,50 +6,70 @@
 				$this->create();
 			else if(isset($_GET['delete']))
 				$this->delete();
-				
-			require_once('controllers/php-rest-client/rest_client.php');
-			$parcours = RestClient::connect('localhost')
-					->get('./HexapodApi/api/parcours_controller.php')
-					->run();
+			else if(isset($_GET['update']))
+				$this->edit();
 
-			$jsondata = json_decode($parcours);
+			require_once('controllers/php-rest-client/rest_client.php');
+				$parcours = RestClient::connect('localhost')
+						->get('./HexapodApi/api/parcours_controller.php')
+						->run();
+
+			$jsondata = json_decode($parcours);	
+			
 			$parcoursList = array();
-			foreach ($jsondata as $data) {
-				$parcours2 = Parcours::withId($data->id,$data->name,$data->command);
-				array_push($parcoursList,$parcours2);
-			}
+				foreach ($jsondata as $data) {
+					$parcours2 = Parcours::withId($data->id,$data->name,$data->command);
+					array_push($parcoursList,$parcours2);
+				}
 
 			require_once('views/pages/parcours/datatable.php');
 		}
 
 		public function delete() {
-			$parcours_id = $_GET['id'];
-			require_once('controllers/php-rest-client/rest_client.php');
-				$parcours = RestClient::connect('localhost')
-				->delete('./HexapodApi/api/parcours_controller.php')				
-				->param('id', $parcours_id)
-				->run();	
+			if(!empty($_GET['id'])) {
+
+				require_once('controllers/php-rest-client/rest_client.php');
+					$parcours = RestClient::connect('localhost')
+						->delete('./HexapodApi/api/parcours_controller.php')				
+						->param('id', $_GET['id'])
+						->run();	
+						echo '<div class="container"><div class="row"><h4>'.$parcours.'</h4></div></div>'; 	
+			}
 		}
 
 		public function create() {	
-			$command = $_POST['command1']."+".$_POST['command2'];
-			$data =  new Parcours($_POST['name'],$command);
-			require_once('controllers/php-rest-client/rest_client.php');
-			$parcours = RestClient::connect('localhost')
-					->post('./HexapodApi/api/parcours_controller.php')
-					->param('name', $data->name)
-					->param('command', $data->command)
-					->run();
-			echo $parcours;
-			if(empty($_POST['name']))
-			$error_message = 'Erreur lors de l\'ajout';
-			else
-			$success_message = 'Ajouté avec succès !';
+			if(!empty($_POST['name'])) {
 
+				$data =  new Parcours($_POST['name'], $_POST['command']);
+
+				require_once('controllers/php-rest-client/rest_client.php');
+					$parcours = RestClient::connect('localhost')
+						->post('./HexapodApi/api/parcours_controller.php')
+						->param('id', 0)
+						->param('name', $data->name)
+						->param('command', $data->command)
+						->run();
+						echo '<div class="container"><div class="row"><h4>'.$parcours.'</h4></div></div>'; 		
+			}	
 		}
 
 		public function edit() {
-			require_once('views/pages/parcours/edit.php');
+			if(!empty($_GET['id'])) {
+
+				//$command = $_POST['command1']."+".$_POST['command2'];
+				//$data =  new Parcours($_POST['name'],$command);
+
+				require_once('controllers/php-rest-client/rest_client.php');
+					$parcours = RestClient::connect('localhost')
+						->post('./HexapodApi/api/parcours_controller.php')
+						->param('id', $_GET['id'])
+						->param('name', "taAta")
+						->param('command', "tata")
+						->run();
+						//echo '<div class="container"><div class="row"><h4>'.$parcours.'</h4></div></div>'; 	
+						//var_dump($parcours);
+						//echo $_GET['id'];	
+			}
 		}
 	}
 

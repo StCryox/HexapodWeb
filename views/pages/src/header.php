@@ -18,7 +18,7 @@
             <a class="nav-link" href="index.php">Description <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="index.php?controller=parcours&action=index">Consulter</a>
+              <a class="nav-link" href="index.php?controller=parcours&action=datatable">Consulter</a>
             </li>
           </ul>
         </div>

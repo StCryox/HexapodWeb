@@ -41,11 +41,7 @@
 
 						'parcours'
 							=> [
-								'index', 
 								'datatable',
-								'create', 
-								'edit',
-								'delete'
 								],
 
 					   'accounts' 
