@@ -1,14 +1,14 @@
 <div class="container">	   
-	<h3>Sign up</h3>
+	<h3>Inscription</h3>
 	
 	<form method="POST" action="">
 		<p>
-			<label>Name</label>
+			<label>Nom</label>
 			<span>*</span>
 			<input type="text" value="" required>
 		</p>
 		<p>
-			<label>Surname</label>
+			<label>Prénom</label>
 			<span>*</span>
 			<input type="text" value="" required>
 		</p>
@@ -23,12 +23,12 @@
 			<input type="text" value="" required>
 		</p>
 		<p>
-			<label>Password</label>
+			<label>Mot de passe</label>
 			<span>*</span>
 			<input type="password" value="" required>
 		</p>
 		<p>
-			<label>Re-type your password</label>
+			<label>Confirmer mot de passe</label>
 			<span>*</span>
 			<input type="password" value="" required>
 		</p>

@@ -3,6 +3,7 @@
 	<head>
 		<title>Gestion de l'hexapode</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- Personal CSS -->
 		<link rel="stylesheet" type="text/css" href="views/static/css/personal.css">
 		<!-- Bootstrap core CSS -->
 		<link rel="stylesheet" type="text/css" href="views/vendor/bootstrap/css/bootstrap.min.css">
@@ -28,6 +29,7 @@
 		<!-- Bootstrap core JavaScript -->
 		<script type="text/javascript" src="views/vendor/jquery/jquery.min.js"></script>
 		<script type="text/javascript" src="views/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-		
+		<!-- Personal JS -->
+		<script type="text/javascript" src="views/static/js/form_action.js"></script>
 	</body>
 </html>

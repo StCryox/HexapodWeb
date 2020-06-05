@@ -1,5 +1,27 @@
-
 <div class="container">
+  <?php 
+   if (isset($this->_success_message) && !empty($this->_success_message)) {
+  ?>
+    <h4 class="text-center">
+      <div class="alert alert-success" role="alert">
+        <?php echo $this->_success_message; ?>
+      </div>
+    </h4>
+  <?php
+   }
+  ?>
+
+  <?php 
+   if (isset($this->_error_message) && !empty($this->_error_message)) {
+  ?>
+    <h4 class="text-center">
+      <div class="alert alert-danger" role="alert">
+        <?php echo $this->_error_message; ?>
+      </div>
+    </h4>
+  <?php
+   }
+  ?>
   <div class="row">
       <table class="table table-striped table-bordered" style="width:100%" id="parcoursTable">
         <thead>
@@ -9,15 +31,24 @@
             <th colspan="3">Commande</th>                                     
           </tr>
         </thead>   
-        <tbody>
+        <tbody id="parcoursTBody">
           <?php
-          foreach ($parcoursList as $parcours)
+          foreach ($this->parcoursList as $parcours)
           {
           ?>
             <tr>
-              <td><?php echo $parcours->id; ?></td>
-              <td id="test"><?php echo $parcours->name; ?></td>
-              <td><?php echo $parcours->command; ?></td>
+              <td>
+                <?php echo $parcours->id; ?>
+                <input class="idShow" type="hidden" value="<?php echo $parcours->id; ?>">
+              </td>
+              <td>
+                <?php echo $parcours->name; ?>
+                <input class="nameShow" type="hidden" value="<?php echo $parcours->name; ?>">
+              </td>
+              <td>
+                <?php echo $parcours->command; ?>
+                <input class="commandShow" type="hidden" value="<?php echo $parcours->command; ?>">
+              </td>
               <td>
               <a href='#&id=<?php echo $parcours->id;?>'>
                   <button type='button' class="btn btn-info" onclick="ShowForm_edit()">
@@ -46,8 +77,11 @@
               <form id="form" method="post" action="?controller=parcours&action=datatable&postback#add-cell">
                 <td>
                   <?PHP
+                  if(!empty($jsondata)) {
                     $last_id = end($jsondata);
                     echo $last_id->id+1;
+                  }
+                  else echo "1";
                   ?>                  
                 </td>
                 <td><input type="text" name="name" class="form-control" placeholder="nom"></td>
@@ -97,7 +131,7 @@
         </thead>   
         <tbody>
             <tr>
-              <td id="testcommande"></td>                         
+              <td id="commandAddRowValue"></td>                         
             </tr>
         </tbody>
       </table>
@@ -114,10 +148,16 @@
         </thead>   
         <tbody>
             <tr>
-              <form id="form" method="post" action="?controller=parcours&action=datatable&update&id=<?php echo $parcours->id; ?>">
-                <td><?PHP// echo $_GET['id'];?></td>
-                <td><input type="text" name="name" class="form-control"></td>
-                <td><input type="text" name="command" class="form-control"></td>
+              <form id="form" method="post" action="?controller=parcours&action=datatable&update">
+                <td id="idPutShow">
+                </td>
+                <td>
+                  <input type="hidden" id="idPut" name="idPutVal" class="form-control">
+                  <input type="text" id="namePut" name="namePutVal" class="form-control">
+                </td>
+                <td>
+                  <input type="text" id="commandPut" name="commandPutVal" class="form-control">
+                </td>
                 <td colspan="2">
                   <center><button type="submit" class="btn btn-success" onclick="HideForm_edit()">
                     <svg class="bi bi-check" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -131,72 +171,3 @@
       </table>
   </div>
 </div>
-
-<script >
-
- /* document.getElementById("add_row").addEventListener("click", function(event){
-    let valeur1 = document.getElementById('command1').value;
-    let valeur2 = document.getElementById('command2').value;
-    console.log(valeur1);
-    console.log(valeur2);
-    var valeur = valeur1."pendant".valeur2."secondes.";
-    console.log(valeur);
-    console.log("test");
-  });*/
-
-  function ShowForm_edit() {
-     $("#form_edit").show();
-  }
-
-  function HideForm_edit() {
-     $("#form_edit").hide();
-  }
-  
-  function add_rowData(){
-    let val1 = document.getElementById("command1").value;
-    let val2 = document.getElementById("command2").value;
-
-    let value_to_text = '';
-    var str2 = '';
-    
-    var commandPOST = val1 + '+' + val2 + ';';
-    var dataPOST = stockage(commandPOST);
-    document.getElementById('commandFull').value = dataPOST;
-        
-      switch (val1) {
-        case 'z':
-          value_to_text = val1.replace("z", "Avancer");
-        break;
-        case 'q':
-          value_to_text = val1.replace("q", "Tourner à gauche");
-        break;
-        case 's':
-          value_to_text = val1.replace("s", "Reculer");
-          break;
-        case 'd':
-          value_to_text = val1.replace("d", "Tourner à droite");
-          break;
-      }
-
-    if(val2 == 1) str2 = 'seconde';
-    else str2 = 'secondes';
-
-    var command = value_to_text + ' pendant ' + val2 + ' ' + str2 + '.' + '</br>';
-    var RowData = view(command);
-    document.getElementById('testcommande').innerHTML = RowData;
-
-  }
-
-  var commandBrut = '';
-  function stockage(stockage){
-    commandBrut += stockage;
-    return commandBrut;
-  }
-
-  var commandBeautify = '';
-  function view(stockage){
-    commandBeautify += stockage;
-    return commandBeautify;
-  }
-
-</script>

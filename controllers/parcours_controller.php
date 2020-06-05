@@ -1,6 +1,15 @@
 <?php
 	class ParcoursController {
-		
+		private $_success_message = '';
+		private $_error_message = '';
+		public $_parcoursData = array();
+		public $parcoursList = array();
+			
+		private function isJson($string) {
+			json_decode($string);
+			return (json_last_error() == JSON_ERROR_NONE);
+		   }
+
 		public function datatable() {
 			if (isset($_GET['postback']))
 				$this->create();
@@ -13,14 +22,19 @@
 				$parcours = RestClient::connect('localhost')
 						->get('./HexapodApi/api/parcours_controller.php')
 						->run();
-
-			$jsondata = json_decode($parcours);	
+								
 			
-			$parcoursList = array();
+			if($this->isJson($parcours)) {
+				$jsondata = json_decode($parcours);	
 				foreach ($jsondata as $data) {
 					$parcours2 = Parcours::withId($data->id,$data->name,$data->command);
-					array_push($parcoursList,$parcours2);
+					array_push($this->parcoursList,$parcours2);
 				}
+			}
+			else
+				$this->_error_message = 'Aucun parcours n\'a été trouvé.';
+			
+				
 
 			require_once('views/pages/parcours/datatable.php');
 		}
@@ -32,44 +46,55 @@
 					$parcours = RestClient::connect('localhost')
 						->delete('./HexapodApi/api/parcours_controller.php')				
 						->param('id', $_GET['id'])
-						->run();	
-						echo '<div class="container"><div class="row"><h4>'.$parcours.'</h4></div></div>'; 	
+						->run();		
+						$this->_success_message = 'Le parcours a été supprimé.';
 			}
 		}
 
 		public function create() {	
-			if(!empty($_POST['name'])) {
+			if(!empty($_POST['name']) && !empty($_POST['command'])) {
 
-				$data =  new Parcours($_POST['name'], $_POST['command']);
-
+				$this->_parcoursData['parcours'] = array(
+					'name' 	  => $_POST['name'],
+					'command' => $_POST['command']
+				);
 				require_once('controllers/php-rest-client/rest_client.php');
 					$parcours = RestClient::connect('localhost')
-						->post('./HexapodApi/api/parcours_controller.php')
-						->param('id', 0)
-						->param('name', $data->name)
-						->param('command', $data->command)
+						->post('./HexapodApi/api/parcours_controller.php')	
+						->header('Content-Type', 'application/json')
+						->param($this->_parcoursData)
 						->run();
-						echo '<div class="container"><div class="row"><h4>'.$parcours.'</h4></div></div>'; 		
+
+					if($parcours == '400 : La syntaxe de la requête est erronée.')
+						$this->_error_message = 'Le nom de parcours existe déjà.';
+					else
+						$this->_success_message = 'Le parcours a été crée.';	
 			}	
+			else 
+				$this->_error_message = 'Les champs ne peuvent être vide.';
 		}
 
 		public function edit() {
-			if(!empty($_GET['id'])) {
-
-				//$command = $_POST['command1']."+".$_POST['command2'];
-				//$data =  new Parcours($_POST['name'],$command);
-
-				require_once('controllers/php-rest-client/rest_client.php');
-					$parcours = RestClient::connect('localhost')
-						->post('./HexapodApi/api/parcours_controller.php')
-						->param('id', $_GET['id'])
-						->param('name', "taAta")
-						->param('command', "tata")
-						->run();
-						//echo '<div class="container"><div class="row"><h4>'.$parcours.'</h4></div></div>'; 	
-						//var_dump($parcours);
-						//echo $_GET['id'];	
-			}
+			
+				if(!empty($_POST['namePutVal']) && !empty($_POST['commandPutVal'])) {
+					
+					$this->_parcoursData['parcours'] = array(
+						'name' 	  => $_POST['namePutVal'],
+						'command' => $_POST['commandPutVal']
+					);
+					
+					require_once('controllers/php-rest-client/rest_client.php');
+						$parcours = RestClient::connect('localhost')
+							->put('./HexapodApi/api/parcours_controller.php?id='.$_POST['idPutVal'])
+							->header('Content-Type', 'application/json')
+							->param($this->_parcoursData)
+							->run();
+							$this->_success_message = 'Le parcours a été modifié.';		
+							
+				}
+				else 
+					$this->_error_message = 'Les champs ne peuvent être vide.';	
+			
 		}
 	}
 

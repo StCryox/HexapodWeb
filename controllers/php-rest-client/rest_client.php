@@ -34,8 +34,10 @@
 		}
 		
 		private function _param($data) {
-			foreach ($data as $value) {
-				$value = addslashes($value);
+			if (!is_array($data)) {
+				foreach ($data as $value) {
+					$value = addslashes($value);
+				}
 			}
 			
 			$this->_params = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);

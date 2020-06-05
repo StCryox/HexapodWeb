@@ -20,6 +20,6 @@
 			</p>
 		</form>
 		<br />
-		<h4><a href="?controller=account&action=signup">Need an account ?</a></h4>
+		<h4><a href="?controller=account&action=signup">Inscription</a></h4>
 	</div>
 </div>
